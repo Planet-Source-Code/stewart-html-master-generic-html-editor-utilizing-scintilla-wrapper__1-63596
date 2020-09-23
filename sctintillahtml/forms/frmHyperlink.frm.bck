@@ -1,0 +1,172 @@
+
+VERSION 5.00
+Begin VB.Form frmHyperlink 
+   BorderStyle     =   3  'Fixed Dialog
+   Caption         =   "Insert Hyperlink"
+   ClientHeight    =   4335
+   ClientLeft      =   45
+   ClientTop       =   435
+   ClientWidth     =   6420
+   Icon            =   "frmHyperlink.frx":0000
+   LinkTopic       =   "Form1"
+   MaxButton       =   0   'False
+   MinButton       =   0   'False
+   ScaleHeight     =   4335
+   ScaleWidth      =   6420
+   ShowInTaskbar   =   0   'False
+   StartUpPosition =   3  'Windows Default
+   Begin VB.PictureBox picSplit 
+      Height          =   53
+      Left            =   840
+      ScaleHeight     =   0
+      ScaleWidth      =   5355
+      TabIndex        =   11
+      TabStop         =   0   'False
+      Top             =   3720
+      Width           =   5415
+   End
+   Begin VB.ComboBox cmbTitle 
+      Height          =   315
+      Left            =   840
+      TabIndex        =   7
+      Top             =   3240
+      Width           =   5415
+   End
+   Begin VB.ComboBox cmbTarget 
+      Height          =   315
+      ItemData        =   "frmHyperlink.frx":000C
+      Left            =   840
+      List            =   "frmHyperlink.frx":001F
+      TabIndex        =   5
+      Top             =   2520
+      Width           =   5415
+   End
+   Begin VB.PictureBox picLink 
+      AutoSize        =   -1  'True
+      BorderStyle     =   0  'None
+      Height          =   555
+      Left            =   120
+      Picture         =   "frmHyperlink.frx":00B8
+      ScaleHeight     =   555
+      ScaleWidth      =   525
+      TabIndex        =   10
+      TabStop         =   0   'False
+      Top             =   120
+      Width           =   525
+   End
+   Begin VB.ComboBox cmbURL 
+      Height          =   315
+      Left            =   840
+      TabIndex        =   3
+      Top             =   1800
+      Width           =   5415
+   End
+   Begin VB.TextBox txtText 
+      Height          =   1095
+      Left            =   840
+      MultiLine       =   -1  'True
+      ScrollBars      =   3  'Both
+      TabIndex        =   1
+      Top             =   360
+      Width           =   5415
+   End
+   Begin VB.CommandButton cmdCancel 
+      Cancel          =   -1  'True
+      Caption         =   "&Cancel"
+      Height          =   375
+      Left            =   4920
+      TabIndex        =   9
+      Top             =   3840
+      Width           =   1335
+   End
+   Begin VB.CommandButton cmdOK 
+      Caption         =   "&Insert"
+      Default         =   -1  'True
+      Height          =   375
+      Left            =   3480
+      TabIndex        =   8
+      Top             =   3840
+      Width           =   1335
+   End
+   Begin VB.Label Label4 
+      Caption         =   "T&itle"
+      Height          =   375
+      Left            =   840
+      TabIndex        =   6
+      Top             =   3000
+      Width           =   1695
+   End
+   Begin VB.Label Label3 
+      Caption         =   "T&arget"
+      Height          =   255
+      Left            =   840
+      TabIndex        =   4
+      Top             =   2280
+      Width           =   3015
+   End
+   Begin VB.Label Label2 
+      Caption         =   "&Link URL:"
+      Height          =   375
+      Left            =   840
+      TabIndex        =   2
+      Top             =   1560
+      Width           =   2535
+   End
+   Begin VB.Label Label1 
+      Caption         =   "Link &Text:"
+      Height          =   375
+      Left            =   840
+      TabIndex        =   0
+      Top             =   120
+      Width           =   1935
+   End
+End
+Attribute VB_Name = "frmHyperlink"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+
+Private Sub cmdCancel_Click()
+  Unload Me
+End Sub
+
+Private Sub cmdOK_Click()
+  On Error Resume Next
+  Dim str As String, tgt As String
+  str = "<A HREF=" & strQ & cmbURL.Text & strQ
+  If cmbTitle <> "" Then
+    str = str & " TITLE=" & strQ & cmbTitle.Text & strQ
+  End If
+  
+  Select Case cmbTarget.ListIndex
+    Case 0
+      tgt = ""
+    Case 1
+      tgt = "_self"
+    Case 2
+      tgt = "_top"
+    Case 3
+      tgt = "_blank"
+    Case 4
+      tgt = "_parent"
+    Case Else
+      tgt = cmbTarget.Text
+  End Select
+  str = str & " TARGET=" & strQ & tgt & strQ & ">"
+  str = str & txtText.Text
+  str = str & "</A>"
+  Me.Hide
+  frmMain.ActiveForm.sciMain.SelText = str
+  frmMain.ActiveForm.sciMain.SetFocus
+  Unload Me
+End Sub
+
+Private Sub Form_Load()
+  Flatten Me
+  cmbTarget.ListIndex = 1
+End Sub
+Private Sub Form_Initialize()
+    InitCommonControls
+End Sub
+
